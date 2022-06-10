@@ -3,16 +3,18 @@ export default class ColumnChart {
 
   constructor({
                 data = [],
-                label = null,
-                value = null,
-                link = null,
+                label = '',
+                value = '',
+                link = '',
                 formatHeading = (header) => header
               } = {}) {
+    this.chartHeight = 50;
+
     this.data = data;
     this.label = label;
     this.value = value;
     this.link = link;
-    this.formatHeading = formatHeading ? formatHeading : (header) => header;
+    this.formatHeading = formatHeading;
 
     this.render();
     this.setSubElements();
@@ -59,7 +61,7 @@ export default class ColumnChart {
 
   getChartTemplate() {
     const maxValue = Math.max(...this.data);
-    const scale = 50 / maxValue;
+    const scale = this.chartHeight / maxValue;
 
     return this.data.map(item => {
       const point = {
