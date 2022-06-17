@@ -14,7 +14,7 @@ export default class NotificationMessage {
     this.type = this.notificationTypes[config.type];
 
     if (NotificationMessage.notification) {
-      NotificationMessage.notification.delete();
+      NotificationMessage.notification.remove();
     }
 
     NotificationMessage.notification = this;
@@ -35,15 +35,21 @@ export default class NotificationMessage {
     return div.firstChild;
   }
 
-  show() {
-    document.body.append(this.element);
+  show(element = document.body) {
+    element.append(this.element);
 
-    this.timeout = setTimeout(NotificationMessage.notification.delete, this.duration);
+    this.timeout = setTimeout(NotificationMessage.notification.remove, this.duration);
   }
 
-  delete() {
-    NotificationMessage.notification.element.remove();
-    NotificationMessage.notification = null;
-    clearTimeout(this.timeout);
+  remove() {
+    if (NotificationMessage.notification) {
+      NotificationMessage.notification.element.remove();
+      clearTimeout(NotificationMessage.notification.timeout);
+      NotificationMessage.notification = null;
+    }
+  }
+
+  destroy() {
+    this.remove();
   }
 }
